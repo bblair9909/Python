@@ -1,0 +1,134 @@
+"""
+
+import pandas as pd
+import sqlite3
+import matplotlib.pyplot as plt
+  
+# reading in csv file
+
+data1 = pd.read_csv(r'/Users/brianblair/Downloads/noshowappointments.csv',sep=",", encoding='latin1')
+
+# Code to find and replace blank values with NaN
+
+data1["No-show"]=data1["No-show"].fillna("nan")
+
+#Rename No-show column to fix parsing error for "-"
+
+data1.rename(columns={'No-show':'ns_count'}, inplace=True)
+
+#Show Updated DF with nan
+
+print("\ndata1_df:")
+
+print(data1)
+
+# Code for "y" output to display counts of No Show appointments (listed as Yes) grouped by Patient ID
+
+y = data1[(data1['ns_count'] == 'Yes')].groupby(['PatientId']).agg({'ns_count':'count'}).reset_index()
+
+# Code for "x" output to display counts of No Show appointments (listed as Yes) grouped by Neighbourhood
+
+x = data1[(data1['ns_count'] == 'Yes')].groupby(['Neighbourhood']).agg({'ns_count':'count'}).reset_index()
+
+#Show Outputs of No Shows grouped
+
+print(x,y)
+
+#establish sqlite3 db & connection
+
+conn = sqlite3.connect('noshows.db')
+
+#open cursor for sql code
+
+c = conn.cursor()
+
+#create patients table
+
+c.execute("""CREATE TABLE patients_nsh4(
+           PatientId text,
+            ns_count integer
+            )""")
+
+
+# Insert data from x to patient_id_counts_tbl.
+
+y.to_sql('patients_nsh4', con=conn, if_exists='append', index=False)
+
+print("\ninserted data from x to patients_nsh4")
+
+#create neighbourhood table
+
+c.execute("""CREATE TABLE neighbourhood_nsh4 (
+            Neighbourhood text,
+            ns_count integer
+            )""")
+
+# Insert data from neighbourhood_freq_dist to neighbourhood_counts_tbl.
+
+x.to_sql('neighbourhood_nsh4', con=conn, if_exists='append', index=False)
+
+print("\ninserted data from y to neighbourhood_nsh4")
+
+conn.commit()
+
+
+# Get output dfs.
+
+output_neighbourhood_df = pd.read_sql('SELECT * FROM neighbourhood_nsh4', conn)
+output_neighbourhood_df.sort_values(by=['ns_count'], ascending=(False), inplace=(True))
+
+print("\noutput_neighbourhood_df:")
+
+print(output_neighbourhood_df)
+
+output_patient_id_df = pd.read_sql('SELECT * FROM patients_nsh4', conn)
+output_patient_id_df.sort_values(by=['ns_count'], ascending=(False), inplace=(True))
+
+print("\noutput_patient_id_df:")
+
+print(output_patient_id_df)
+
+conn.close()
+
+#Export DF to file
+
+data1.to_csv((r'/Users/brianblair/Downloads/brian.blair_Mod6 CourseProject_11082022.csv'))
+
+nShow2 = data1[data1['ns_count'] == 'Yes']
+
+#Creating a data frame (nShow_counts) by calling nShow2, and establishing a count of the 'Neighbourhood' column.
+
+nShow_counts=nShow2["Neighbourhood"].value_counts()
+
+# Code for "z" output to display counts of No Show appointments (listed as Yes) grouped by Neighbourhood
+
+#plotting the new data frame
+
+nShow_counts.plot()
+
+
+#Creating a Title for the Chart with font attributes
+
+plt.title('Count of No-shows', fontdict={'fontweight':'bold', 'fontsize': 16})
+
+
+
+#Creating a label for the x-axis with font attributes
+
+plt.xlabel('Neighbourhood', fontdict={'fontweight':'bold', 'fontsize': 14})
+
+
+
+#Adjusting xticks font size for legibility
+
+plt.xticks(rotation=80, fontsize=8)
+
+#Creating a label for the y-axis with font attributes
+
+plt.ylabel('No-Shows', fontdict={'fontweight':'bold', 'fontsize': 14})
+
+
+
+#Saving the figure to a .png file
+
+plt.savefig('/Users/brianblair/Downloads/BBlair_Mod6 Course Project_Line Chart.png', dpi=300)
