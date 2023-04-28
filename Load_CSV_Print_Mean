@@ -1,0 +1,11 @@
+import pandas as pd
+
+import numpy.ma as ma
+
+
+
+data1 = pd.read_csv (r'/Users/brianblair/Downloads/trump_forbes_richest_americans.csv',sep=",", encoding='latin1')
+
+mx = ma.masked_invalid(data1['Worth'].to_numpy())
+
+print(mx.mean())
