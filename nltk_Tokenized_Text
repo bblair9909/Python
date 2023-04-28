@@ -1,0 +1,54 @@
+"""
+Created on Tue Nov  8 22:03:21 2022
+
+@author: brianblair
+"""
+#Import the nltk library
+
+import nltk
+
+#download nltk lists
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
+#import necessary modules
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+  
+#Text to be Tokenized
+
+example_text = """This school was founded in 1900 by Walter Rasmussen as the Rasmussen Practical School of Business, located in Stillwater, Minnesota. Rasmussen believed that the need for skilled professionals by the local business community was not being met.
+
+The first classes were held in September 1900.With the advent of women's suffrage in 1920 through the passage of the Nineteenth Amendment, the school’s female enrollment began to increase. In 1945 Walter Rasmussen retired and named Walter Nemitz to succeed him as director of the college. Nemitz had been already with the college since 1934 and as director instituted a number of curriculum upgrades. By 1950, more than 22,400 students had graduated from the school."""
+  
+#create stopword variable and reference english language list
+
+all_stopwords = stopwords.words('english')
+
+#Append and add Minnesota word to stop list
+
+all_stopwords.append('Minnesota')
+  
+#create word tokens from example text
+
+word_tokens = word_tokenize(example_text)
+  
+#filtered logic
+
+filtered_sentence = [word for word in word_tokens if not word.lower() in all_stopwords]
+  
+filtered_sentence = []
+  
+for word in word_tokens:
+    if word not in all_stopwords:
+        filtered_sentence.append(word)
+  
+#print tokenized output
+
+print(word_tokens)
+
+#print filtered sentence w/out Minessota
+
+print(filtered_sentence)
