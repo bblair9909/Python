@@ -1,0 +1,23 @@
+#Import required libraries
+
+import pandas as pd
+
+# reading in json file
+
+data=pd.read_json(r'/Users/brianblair/Downloads/zips.json', lines=True)
+
+# converting json file to a dataframe
+
+df =pd.DataFrame(data)
+
+## Code to find and replace blank values with Not Available
+
+df['_id'] = df['_id'].replace([''], 'Not Available')
+
+#Displaying updated data frame
+
+print (df)
+
+#exporting data frame as a json file
+
+df.to_json(r'/Users/brianblair/Downloads/brian.blair_Mod3 Assignment_10123022.json')
