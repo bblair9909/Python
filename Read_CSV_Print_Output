@@ -1,0 +1,13 @@
+import pandas as pd
+  
+# reading two csv files
+data1 = pd.read_csv('/Users/brianblair/Downloads/Cereal.csv')
+data2 = pd.read_csv('/Users/brianblair/Downloads/Cereal_MFRCategorical.csv')
+  
+# using merge function by setting how='inner'
+output1 = pd.merge(data1, data2, 
+                   on='name', 
+                   how='inner')
+  
+# displaying result
+print(output1)
