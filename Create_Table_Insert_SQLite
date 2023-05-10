@@ -1,0 +1,53 @@
+@author: brianblair
+"""
+#import necessary libraries
+
+import pandas as pd
+import sqlite3
+  
+# reading in csv file
+
+data1 = pd.read_csv(r'/Users/brianblair/Downloads/Most-Recent-Cohorts-Scorecard-Elements.csv', delimiter="\s+", encoding='latin1')
+
+#create database
+
+conn = sqlite3.connect('mod4.db')
+
+#open cursor for SQL commands
+
+c = conn.cursor()
+
+#create table
+
+c.execute("""CREATE TABLE Cohorts_tb3 (
+           UNITID integer,
+           OPEID integer,
+           OPEID6 integer,
+           INSTNM text,
+           CITY text,
+           STABBR text,
+           INSTURL text,
+           NPCURL text,
+           HCM2 text,
+           PREDDEG integer,
+           HIGHDEG integer,
+           CONTROL integer
+            )""")
+
+# Insert data from x to patient_id_counts_tbl
+
+data1.to_sql('Cohorts_tb3', con=conn, if_exists='append', index=False)
+
+print("\ninserted data from data1 to Cohorts_tb3")
+
+# Get output dfs.
+
+output_Cohorts_df = pd.read_sql('SELECT * FROM Cohorts_tb3', conn)
+
+print("\noutput_Cohorts_df:")
+
+print(output_Cohorts_df)
+
+#close connection
+
+conn.close()
