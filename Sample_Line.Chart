@@ -1,0 +1,32 @@
+#Importing the Python utilities to be used
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+df = pd.read_csv('/Users/brianblair/Downloads/Automobile_data.csv')
+df['Car-Type'] = df['Car-Type'].replace(np.nan,'Not-Available')
+
+#Creating a new datafile to perform groupby operations within the Car-Type column. 
+#Output results are reflected by a count (.count()).
+n_count_cartype=df.groupby('Car-Type')['Car-Type'].count()
+
+#Observing the results by printing the newly defined datafile given .count()
+print(n_count_cartype)
+
+#Creating the line plot and establishing line parameters
+n_count_cartype.plot(marker='o', markeredgecolor='blue', linestyle='--')
+
+#Creating a Title for the Chart with font attributes
+plt.title('Line Chart of Number of Cars per Car-Type', fontdict={'fontweight':'bold', 'fontsize': 16})
+
+#Creating a label for the x-axis with font attributes
+plt.xlabel('Car-Type', fontdict={'fontweight':'bold', 'fontsize': 12})
+
+#Creating a label for the y-axis with font attributes
+plt.ylabel('Number of Cars', fontdict={'fontweight':'bold', 'fontsize': 12})
+
+#Saving the figure to a .png file
+plt.savefig('/Users/brianblair/Downloads/Module5_figure.png', dpi=300)
+
+#Observing the output of the generated line plot
+plt.show(n_count_cartype.plot)
