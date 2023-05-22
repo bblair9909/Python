@@ -1,0 +1,34 @@
+@author: brianblair
+"""
+
+#import numpy as np # linear algebra
+import pandas as pd # data processing
+
+data1 = pd.read_csv(r'/Users/brianblair/Python_Dock/IA_April-c.csv',sep=",")
+data2 = pd.read_csv(r'/Users/brianblair/Python_Dock/OBS_April_5.csv',sep=",")
+
+
+# using merge function by setting how='inner'
+output1 = pd.merge(data1, data2, 
+                   on='AGENT_NAME', 
+                   how='left')
+
+#review resluting dataframe output
+
+print(output1)
+
+#export out final df to csv file for use
+
+output1.to_csv((r'/Users/brianblair/Python_Dock/IA_CSI-Correlation_data.csv'))
+
+#produce correlation coeeficient table
+
+output2 = (output1.corr())
+
+#view correlation table
+
+print(output2)
+
+#export out correlation table to csv file for use
+
+output2.to_csv(r'/Users/brianblair/Python_Dock/IA_CSI_Corr.csv')
