@@ -1,0 +1,36 @@
+@author: brianblair
+"""
+
+#import numpy as np # linear algebra
+import pandas as pd # data processing
+
+#read csv file in
+
+data1 = pd.read_csv(r'/Users/brianblair/Python_Dock/IA_April.csv',sep=",", index_col= False)
+
+##data1.reset_index(drop=True, inplace=True)
+
+
+#establish targeted variable
+
+Agent = data1['AGENT_NAME']
+
+#split the data using specified character, expanding to isolate desired values
+
+data2 = Agent.str.split(pat= "(", expand=True)
+
+#strip leading & trailing spaces in targeted column
+
+data2[0] = data2[0].str.strip()
+
+#replace targeted column with cleansed data
+
+data1['AGENT_NAME'] = data2[0]
+
+#view resulting data frame
+
+print(data1)
+
+#export out final table to csv file for use
+
+data1.to_csv((r'/Users/brianblair/Python_Dock/IA_TEST.csv'))
