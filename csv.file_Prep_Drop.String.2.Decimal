@@ -1,0 +1,27 @@
+@author: brianblair
+"""
+
+#import numpy as np # linear algebra
+import pandas as pd # data processing
+
+#read csv file in
+
+data1 = pd.read_csv(r'/Users/brianblair/Python_Dock/OBS_April_2.csv',sep=",", index_col=[0])
+
+#dropping unnamed pk column
+
+data1.drop(columns=data1.columns[0], axis=1, inplace=True)
+
+#converting string percentages to decimals
+
+data1["OBS Agent"] = data1["OBS Agent"].str.rstrip("%").astype("float") / 100
+data1["FCR Percent Billing & Tech Skills"] = data1["FCR Percent Billing & Tech Skills"].str.rstrip("%").astype("float") / 100
+data1["Transfer % All"] = data1["Transfer % All"].str.rstrip("%").astype("float") / 100
+
+#view resulting table
+
+print(data1)
+
+#export out final table to csv file for use
+
+data1.to_csv((r'/Users/brianblair/Python_Dock/OBS_April_3.csv'))
