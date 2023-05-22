@@ -1,0 +1,94 @@
+@author: brianblair
+"""
+
+#import numpy as np # linear algebra
+import pandas as pd # data processing
+import numpy as np 
+
+
+#read csv file in
+
+data1 = pd.read_csv(r'/Users/brianblair/Python_Dock/OBS_April_2.csv',sep=",", index_col=[0])
+
+#dropping unnamed pk column
+
+data1.drop(columns=data1.columns[0], axis=1, inplace=True)
+
+#converting string percentages to decimals
+
+data1["OBS Agent"] = data1["OBS Agent"].str.rstrip("%").astype("float") / 100
+data1["FCR Percent Billing & Tech Skills"] = data1["FCR Percent Billing & Tech Skills"].str.rstrip("%").astype("float") / 100
+data1["Transfer % All"] = data1["Transfer % All"].str.rstrip("%").astype("float") / 100
+
+#adding condition set assessing average agent score ranges
+
+conditions1 = [
+    (data1['CSI Average Agent'] <= 1.5),
+    ]
+
+conditions2 = [
+    (data1['CSI Average Agent'] >1.5) & (data1['CSI Average Agent'] <= 2.5),
+    ]
+
+conditions3 = [
+    (data1['CSI Average Agent'] >2.5) & (data1['CSI Average Agent'] <= 3.5),
+    ]
+   
+conditions4 = [
+    (data1['CSI Average Agent'] >3.5) & (data1['CSI Average Agent'] <= 4.5),
+    ]
+
+conditions5 = [
+    (data1['CSI Average Agent'] >4.5) & (data1['CSI Average Agent'] <= 5.5),
+    ]
+
+conditions6 = [
+    (data1['CSI Average Agent'] >5.5) & (data1['CSI Average Agent'] <= 6.5),
+    ]
+
+conditions7 = [
+    (data1['CSI Average Agent'] >6.5) & (data1['CSI Average Agent'] <= 7.5),
+    ]
+
+conditions8 = [
+    (data1['CSI Average Agent'] >7.5) & (data1['CSI Average Agent'] <= 8.5),
+    ]
+
+conditions9 = [
+    (data1['CSI Average Agent'] >8.5) & (data1['CSI Average Agent'] <= 9.0),
+    ]
+
+conditions10 = [
+    (data1['CSI Average Agent'] >9.0) & (data1['CSI Average Agent'] <= 10)  
+    ]
+
+#resulting values (counts) associated to each condition
+
+values1 = [1]
+values2 = [1]
+values3 = [1]
+values4 = [1]
+values5 = [1]
+values6 = [1]
+values7 = [1]
+values8 = [1]
+values9 = [1]
+values10 = [1]
+
+#creating columns containing the counts established within the condition/value sets
+
+data1['CSI_Score_1'] = np.select(conditions1, values1)
+data1['CSI_Score_2'] = np.select(conditions2, values2)
+data1['CSI_Score_3'] = np.select(conditions3, values3)
+data1['CSI_Score_4'] = np.select(conditions4, values4)
+data1['CSI_Score_5'] = np.select(conditions5, values5)
+data1['CSI_Score_6'] = np.select(conditions6, values6)
+data1['CSI_Score_7'] = np.select(conditions7, values7)
+data1['CSI_Score_8'] = np.select(conditions8, values8)
+data1['CSI_Score_9'] = np.select(conditions9, values9)
+data1['CSI_Score_10'] = np.select(conditions10, values10)
+
+
+#view resulting table
+
+print(data1)
