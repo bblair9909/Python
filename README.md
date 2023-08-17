@@ -1,2 +1,2 @@
 # Python
-Collection of Python coding projects
+Practical collection of Python coding projects
